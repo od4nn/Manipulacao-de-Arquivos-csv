@@ -49,7 +49,7 @@ O funcionamento do programa segue o fluxo abaixo:
 
 ## Observações
 
-* Cada linha dos arquivos CSV representa um registro independente.
+* Cada linha dos arquivos CSV representa um registro independente!
 * Os dados podem conter repetições que devem ser consideradas no processamento (especialmente em operações de agregação).
 * O foco do projeto está na manipulação de dados em memória, sem uso de banco de dados.
 
