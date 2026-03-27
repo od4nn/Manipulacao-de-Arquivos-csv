@@ -1,0 +1,7 @@
+
+#ifndef MANIPULACAO_ARQUIVOS_LISTA_H
+#define MANIPULACAO_ARQUIVOS_LISTA_H
+
+//defines e funcoes aqui
+
+#endif //MANIPULACAO_ARQUIVOS_LISTA_H

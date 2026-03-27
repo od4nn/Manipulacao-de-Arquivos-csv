@@ -53,3 +53,18 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# Compilação e Binários
+cmake-build-debug/
+cmake-build-release/
+*.exe
+*.o
+*.obj
+
+# Configurações da IDE (CLion)
+.idea/
+
+# Arquivos de log e temporários do sistema
+*.log
+Thumbs.db
+.DS_Store
