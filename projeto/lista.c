@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "lista.h"
+#include <string.h>
 
 int concatenar_dados(void) {
     char *arquivos[] = {
@@ -39,6 +40,7 @@ int concatenar_dados(void) {
     if (r == NULL) {
         return ERR_ABRIR_ARQUIVO;
     }
+
     for (int i = 0; i < QUANT_ESTADOS; i++) {
 
         FILE *f = fopen(arquivos[i], "r");
@@ -77,4 +79,58 @@ int concatenar_dados(void) {
     fclose(r);
 
     return OK; //deu tudo certo
+}
+
+int gerar_resumo(void) {
+    FILE *f = fopen("saida/resultado.csv", "r"); //abre o arquivo gigante de mais de 200 mil linhas
+
+    if (f == NULL) {
+        return ERR_ABRIR_RESULTADO;
+    }
+
+    char LINHA[TAM_LINHA];
+
+    fgets(LINHA, TAM_LINHA, f); //consome o cabeçalho
+
+    while (fgets(LINHA, TAM_LINHA, f) != NULL) { //enquanto nao chegar ao fim do arquivo
+
+        /* Variaveis temporarias */
+
+        char sigla_temp[TAM_SIGLA_TRIB];
+
+        long long julgados_2026temp;
+        long long casos_novos_2026temp;
+        long long dessobrestados_2026temp;
+        long long suspensos_2026temp;
+
+        //para meta 2
+        long long julgm2_atemp;
+        long long distm2_atemp;
+        long long suspm2_atemp;
+
+        //meta 2ant
+        long long julgm2_anttemp;
+        long long distm2_anttemp;
+        long long suspm2_anttemp;
+        long long desom2_anttemp;
+
+        //meta 4a
+        long long julgm4_atemp;
+        long long distm4_atemp;
+        long long suspm4_atemp;
+
+        //meta 4b
+        long long julgm4_btemp;
+        long long distm4_btemp;
+        long long suspm4_btemp;
+
+        char *token = strtok(LINHA, ",");
+        int contador;
+
+        while (token != NULL) {
+
+        }
+    }
+
+
 }
