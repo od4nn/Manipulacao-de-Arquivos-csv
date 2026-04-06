@@ -57,6 +57,8 @@ dkms.conf
 # Compilação e Binários
 cmake-build-debug/
 cmake-build-release/
+# 200 mil linhas é sacanagem
+projeto/saida/
 *.exe
 *.o
 *.obj
