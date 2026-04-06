@@ -19,15 +19,30 @@ int main() {
 
         switch (opcao) {
             case 1: {
-
                 int resultado = concatenar_dados();
 
                 if (resultado == OK) {
-                    printf("\nSucesso! O arquivo foi gerado na pasta 'saida'. ");
+                    printf("\nSucesso! O arquivo de resultado foi gerado"
+                           " na pasta 'saida'. ");
                     break;
                 }
                 if (resultado == ERR_ABRIR_ARQUIVO) {
-                    printf("\nErro ao abrir o arquivo!");
+                    printf("\nErro: ao abrir o arquivo!");
+                    break;
+                }
+            }
+            case 2: {
+                int resultado = gerar_resumo();
+
+                if (resultado == OK) {
+                    printf("\nSucesso! O arquivo de resumo foi gerado na "
+                           "pasta 'saida'.");
+                    break;
+                }
+                if (resultado == ERR_ABRIR_RESULTADO) {
+                    printf("\nErro: arquivo 'resultado' nao encontrado! "
+                           "Voce deve gerar esse arquivo na opcao 1 "
+                           "do menu antes de usar esta funcao.");
                     break;
                 }
             }
