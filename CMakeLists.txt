@@ -6,4 +6,5 @@ set(CMAKE_C_STANDARD 11)
 add_executable(Manipulacao_Arquivos
         projeto/main.c
         projeto/lista.h
+        projeto/lista.c
 )
