@@ -57,8 +57,13 @@ dkms.conf
 # Compilação e Binários
 cmake-build-debug/
 cmake-build-release/
-# 200 mil linhas é sacanagem
-projeto/saida/
+
+# Ignora todo o conteúdo da pasta de saída
+projeto/saida/*
+
+# Mas não ignore o arquivo que mantém a pasta viva
+!projeto/saida/.gitkeep
+
 *.exe
 *.o
 *.obj
