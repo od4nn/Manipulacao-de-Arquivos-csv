@@ -103,7 +103,7 @@ int gerar_resumo(void) {
         long long dessobrestados_2026temp;
         long long suspensos_2026temp;
 
-        //para meta 2
+        //para meta 2a
         long long julgm2_atemp;
         long long distm2_atemp;
         long long suspm2_atemp;
@@ -125,9 +125,46 @@ int gerar_resumo(void) {
         long long suspm4_btemp;
 
         char *token = strtok(LINHA, ",");
-        int contador;
+        int contador = 0;
 
         while (token != NULL) {
+            switch (contador) {
+                case 0: {
+                    strcpy(sigla_temp, token);
+                    break;
+                }
+                case 10: {
+                    casos_novos_2026temp = atoll(token);
+                    break;
+                }
+                case 11: {
+                    julgados_2026temp = atoll(token);
+                    break;
+                }
+                case 13: {
+                    suspensos_2026temp = atoll(token);
+                    break;
+                }
+                case 14: {
+                    dessobrestados_2026temp = atoll(token);
+                    break;
+                }
+                case 16: {
+                    distm2_atemp = atoll(token);
+                    break;
+                }
+                case 17: {
+                    julgm2_atemp = atoll(token);
+                    break;
+                }
+                case 18: {
+                    suspm2_atemp = atoll(token);
+                    break;
+                }
+
+            }
+            contador++;
+
 
         }
     }
