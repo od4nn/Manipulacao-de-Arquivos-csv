@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "lista.h"
 #include <ctype.h>
@@ -24,11 +25,13 @@ int main() {
 
                 if (resultado == OK) {
                     printf("\nSucesso! O arquivo de resultado foi gerado"
-                           " na pasta 'saida'. ");
+                           " na pasta 'saida'. \n");
                     break;
                 }
                 if (resultado == ERR_ABRIR_ARQUIVO) {
-                    printf("\nErro: ao abrir o arquivo!");
+                    printf("\nErro ao abrir os arquivos!\n");
+                    printf("-> Verifique se a pasta 'Base-de-Dados' esta exatamente no mesmo diretorio do executavel.\n");
+                    printf("-> Verifique se a pasta 'saida' foi criada neste mesmo diretorio.\n");
                     break;
                 }
                 break;
@@ -40,7 +43,7 @@ int main() {
                 switch (resultado) {
                     case OK: {
                         printf("\nSucesso! O arquivo de resumo foi gerado na "
-                           "pasta 'saida'.");
+                           "pasta 'saida'.\n");
                         break;
                     }
                     case ERR_ABRIR_RESULTADO: {
@@ -50,7 +53,9 @@ int main() {
                         break;
                     }
                     case ERR_ABRIR_ARQUIVO: {
-                        printf("\nErro: ao abrir o arquivo na pasta 'saida'!");
+                        printf("\nErro ao abrir os arquivos!\n");
+                        printf("-> Verifique se a pasta 'Base-de-Dados' esta exatamente no mesmo diretorio do executavel.\n");
+                        printf("-> Verifique se a pasta 'saida' foi criada neste mesmo diretorio.\n");
                         break;
                     }
                     case ERR_ALOCAR_MEMORIA: {
@@ -89,7 +94,7 @@ int main() {
                 switch (resultado) {
                     case OK: {
                         printf("\nSucesso! O arquivo de ocorrencias foi gerado na "
-                           "pasta 'saida'.");
+                           "pasta 'saida'.\n");
                         break;
                     }
                     case ERR_ABRIR_RESULTADO: {
@@ -99,7 +104,9 @@ int main() {
                         break;
                     }
                     case ERR_ABRIR_ARQUIVO: {
-                        printf("\nErro: ao abrir o arquivo na pasta 'saida'!");
+                        printf("\nErro ao abrir os arquivos!\n");
+                        printf("-> Verifique se a pasta 'Base-de-Dados' esta exatamente no mesmo diretorio do executavel.\n");
+                        printf("-> Verifique se a pasta 'saida' foi criada neste mesmo diretorio.\n");
                         break;
                     }
                     case ERR_MUNICIPIO_N_EXISTE: {
