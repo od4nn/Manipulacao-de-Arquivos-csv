@@ -10,7 +10,7 @@ int gerar_resumo(void) {
         return ERR_ABRIR_RESULTADO;
     }
 
-    Tribunal *inicio_lista = NULL; // a cabeça
+    Tribunal *inicio_lista = NULL; // a cabeça do nó
 
     char LINHA[TAM_LINHA];
 

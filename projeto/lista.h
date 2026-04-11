@@ -57,5 +57,5 @@ typedef enum {
 
 int concatenar_dados(void); //junta tudo
 int gerar_resumo(void); //faz um resumo de cada estado
-
+int gerar_ocorrencias(char *MUNICIPIO); //mostra todas as linhas que apareceu o nome do municipio
 #endif //MANIPULACAO_ARQUIVOS_LISTA_H
