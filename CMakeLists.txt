@@ -9,4 +9,5 @@ add_executable(Manipulacao_Arquivos
         projeto/concatenar.c
         projeto/gerar_resumo.c
         projeto/gerar_ocorrencias.c
+        projeto/uteis.c
 )
