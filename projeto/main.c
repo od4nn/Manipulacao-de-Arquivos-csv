@@ -45,6 +45,8 @@ int main() {
                            "do menu antes de usar esta funcao.");
                     break;
                 }
+
+                //ainda falta fazer a chamada aqui eu sei, mas ignore por ora, irei fazer isso logo
             }
             case 0: {
                 printf("\nEncerrando o programa...\n");

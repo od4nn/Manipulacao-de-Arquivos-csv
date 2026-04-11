@@ -99,31 +99,31 @@ int gerar_resumo(void) {
 
         char sigla_temp[TAM_SIGLA_TRIB];
 
-        long long julgados_2026temp;
-        long long casos_novos_2026temp;
-        long long dessobrestados_2026temp;
-        long long suspensos_2026temp;
+        long long julgados_2026temp = 0;
+        long long casos_novos_2026temp = 0;
+        long long dessobrestados_2026temp = 0;
+        long long suspensos_2026temp = 0;
 
         //para meta 2a
-        long long julgm2_atemp;
-        long long distm2_atemp;
-        long long suspm2_atemp;
+        long long julgm2_atemp = 0;
+        long long distm2_atemp = 0;
+        long long suspm2_atemp = 0;
 
         //meta 2ant
-        long long julgm2_anttemp;
-        long long distm2_anttemp;
-        long long suspm2_anttemp;
-        long long desom2_anttemp;
+        long long julgm2_anttemp = 0;
+        long long distm2_anttemp = 0;
+        long long suspm2_anttemp = 0;
+        long long desom2_anttemp = 0;
 
         //meta 4a
-        long long julgm4_atemp;
-        long long distm4_atemp;
-        long long suspm4_atemp;
+        long long julgm4_atemp = 0;
+        long long distm4_atemp = 0;
+        long long suspm4_atemp = 0;
 
         //meta 4b
-        long long julgm4_btemp;
-        long long distm4_btemp;
-        long long suspm4_btemp;
+        long long julgm4_btemp = 0;
+        long long distm4_btemp = 0;
+        long long suspm4_btemp = 0;
 
         char *token = strtok(LINHA, ",");
         int contador = 0;
@@ -234,7 +234,7 @@ int gerar_resumo(void) {
                 aux->julgm4_b += julgm4_btemp;
                 aux->suspm4_b += suspm4_btemp;
 
-                achou = 1;
+                achou = 1; // se achou nao precisa ir para o if ali embaixo
                 break;
             }
             aux = aux->prox;
@@ -281,8 +281,6 @@ int gerar_resumo(void) {
             novo_tribunal->julgm4_b = julgm4_btemp;
             novo_tribunal->suspm4_b = suspm4_btemp;
 
-
-
             /* agora o novo tribunal aponta para o mais antigo. caso so existisse
              * Acre antes desse if e o while(fgets) ja chegou em alagoas, os nós
              * ficam estruturados assim agora:
@@ -303,4 +301,80 @@ int gerar_resumo(void) {
             inicio_lista = novo_tribunal;
         }
     }
+
+    fclose(f); //se chegou aqui ja leu tudo
+
+    FILE *saida = fopen("saida/resumo.csv", "w");
+
+    if (saida == NULL) {
+
+        //limpa antes de sair
+        Tribunal *liberar = inicio_lista;
+        while (liberar != NULL) {
+            Tribunal *proximo = liberar->prox;
+            free(liberar);
+            liberar = proximo;
+        }
+
+        return ERR_ABRIR_ARQUIVO;
+    }
+
+    //colocando cabeçalho
+    fprintf(saida, "Tribunal,Meta1,Meta2A,Meta2Ant,Meta4A,Meta4B\n");
+
+    Tribunal *aux = inicio_lista;
+
+    while (aux != NULL) {
+
+        float meta1 = 0.0; //caso mesmo após toda a formula dê 0
+        long long denominador_meta1 = aux->casos_novos_2026 +
+            aux->dessobrestados_2026 - aux->suspensos_2026;
+        if (denominador_meta1 != 0) { // é feito separado para evitar que divida por zero e de crashe o programa
+            meta1 = ((float) aux->julgados_2026 / denominador_meta1) * 100;
+        }
+
+        float meta2a = 0.0;
+        long long denominador_meta2a = aux->distm2_a - aux->suspm2_a;
+        if (denominador_meta2a != 0) {
+            meta2a = ((float) aux->julgm2_a / denominador_meta2a) * (1000.0 / 7.0);
+        }
+
+        float meta2ant = 0.0;
+        long long denominador_meta2ant = aux->distm2_ant - aux->suspm2_ant
+        - aux->desom2_ant;
+        if (denominador_meta2ant != 0) {
+            meta2ant = ((float) aux->julgm2_ant / denominador_meta2ant) * 100;
+        }
+
+        float meta4a = 0.0;
+        long long denominador_meta4a = aux->distm4_a - aux->suspm4_a;
+        if (denominador_meta4a != 0) {
+            meta4a = ((float) aux->julgm4_a / denominador_meta4a) * 100;
+        }
+
+        float meta4b = 0.0;
+        long long denominador_meta4b = aux->distm4_b - aux->suspm4_b;
+        if (denominador_meta4b != 0) {
+            meta4b = ((float) aux->julgm4_b / denominador_meta4b) * 100;
+        }
+
+        /* finalmente coloca no arquivo */
+        fprintf(saida, "%s, %.2f, %.2f, %.2f, %.2f, %.2f\n", aux->sigla_tribunal,
+            meta1, meta2a, meta2ant, meta4a, meta4b);
+
+        aux = aux->prox; //avança para o proximo estado
+        //nesse caso eles estao organizados do ultimo para o primeiro
+    }
+    fclose(saida); //fecha o arquivo de resposta
+
+
+    /* percorre todos os nós dando free, afinal os dados deles ja foram usados */
+    Tribunal *liberar = inicio_lista;
+    while (liberar != NULL) {
+        Tribunal *proximo = liberar->prox; // salva para o próximo antes de liberar
+        free(liberar);                  // agora pode liberar
+        liberar = proximo;              // avança pro próximo
+    }
+
+    return OK; // se chegou aqui, deu tudo certo e gerou o arquivo em saida/
 }
