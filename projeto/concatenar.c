@@ -39,6 +39,7 @@ int concatenar_dados(void) {
     if (r == NULL) {
         return ERR_ABRIR_ARQUIVO;
     }
+
     for (int i = 0; i < QUANT_ESTADOS; i++) {
 
         FILE *f = fopen(arquivos[i], "r");
@@ -54,8 +55,7 @@ int concatenar_dados(void) {
             /* enquanto tiver linhas para ler continue executando, sei que o
              * != NULL é opcional mas optei por usar por clareza de codigo */
             while (fgets(LINHA, TAM_LINHA, f) != NULL) {
-
-                fprintf(r, "%s\n", LINHA);
+                fprintf(r, "%s", LINHA);
             }
 
             fclose(f);
@@ -78,3 +78,4 @@ int concatenar_dados(void) {
 
     return OK; //deu tudo certo
 }
+
