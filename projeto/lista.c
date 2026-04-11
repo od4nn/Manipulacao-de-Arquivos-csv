@@ -56,8 +56,7 @@ int concatenar_dados(void) {
             /* enquanto tiver linhas para ler continue executando, sei que o
              * != NULL é opcional mas optei por usar por clareza de codigo */
             while (fgets(LINHA, TAM_LINHA, f) != NULL) {
-
-                fprintf(r, "%s\n", LINHA);
+                fprintf(r, "%s", LINHA);
             }
 
             fclose(f);
@@ -87,6 +86,8 @@ int gerar_resumo(void) {
     if (f == NULL) {
         return ERR_ABRIR_RESULTADO;
     }
+
+    Tribunal *inicio_lista = NULL; // a cabeça
 
     char LINHA[TAM_LINHA];
 
@@ -161,13 +162,145 @@ int gerar_resumo(void) {
                     suspm2_atemp = atoll(token);
                     break;
                 }
-
+                case 20: {
+                    distm2_anttemp = atoll(token);
+                    break;
+                }
+                case 21: {
+                    julgm2_anttemp = atoll(token);
+                    break;
+                }
+                case 22: {
+                    suspm2_anttemp = atoll(token);
+                    break;
+                }
+                case 23: {
+                    desom2_anttemp = atoll(token);
+                    break;
+                }
+                case 25: {
+                    distm4_atemp = atoll(token);
+                    break;
+                }
+                case 26: {
+                    julgm4_atemp = atoll(token);
+                    break;
+                }
+                case 27: {
+                    suspm4_atemp = atoll(token);
+                    break;
+                }
+                case 29: {
+                    distm4_btemp = atoll(token);
+                    break;
+                }
+                case 30: {
+                    julgm4_btemp = atoll(token);
+                    break;
+                }
+                case 31: {
+                    suspm4_btemp = atoll(token);
+                    break;
+                }
             }
+            token = strtok(NULL, ","); //faz com que na proxima volta o token comece de onte parou
             contador++;
+        }
+
+        Tribunal *aux = inicio_lista;
+        int achou = 0;
+
+        while (aux != NULL) {
+            if (strcmp(aux->sigla_tribunal, sigla_temp) == 0) {
+                aux->casos_novos_2026 += casos_novos_2026temp;
+                aux->julgados_2026 += julgados_2026temp;
+                aux->suspensos_2026 += suspensos_2026temp;
+                aux->dessobrestados_2026 += dessobrestados_2026temp;
+
+                aux->distm2_a += distm2_atemp;
+                aux->julgm2_a += julgm2_atemp;
+                aux->suspm2_a += suspm2_atemp;
+
+                aux->distm2_ant += distm2_anttemp;
+                aux->julgm2_ant += julgm2_anttemp;
+                aux->suspm2_ant += suspm2_anttemp;
+                aux->desom2_ant += desom2_anttemp;
+
+                aux->distm4_a += distm4_atemp;
+                aux->julgm4_a += julgm4_atemp;
+                aux->suspm4_a += suspm4_atemp;
+
+                aux->distm4_b += distm4_btemp;
+                aux->julgm4_b += julgm4_btemp;
+                aux->suspm4_b += suspm4_btemp;
+
+                achou = 1;
+                break;
+            }
+            aux = aux->prox;
+        }
+
+        if (achou == 0) { //Tribunal não existe ainda, vamos cria-lo
+            Tribunal *novo_tribunal = malloc(sizeof(Tribunal)); // é um novo nó, mas tambem o novo tribunal e o novo inicio de lista
+
+            if (novo_tribunal == NULL) {
+                fclose(f);
+                return ERR_ALOCAR_MEMORIA;
+            }
+
+            /* Copiando todos os dados do switch para o novo bloco de memoria que é
+             * o novo tribunal. --------------------------
+             * Da proxima vez que o loop rodar ele vai encontrar a sigla e nao
+             * vai vir aqui, ele vai ficar em: while (aux != NULL) ate achar o estado */
+
+            strcpy(novo_tribunal->sigla_tribunal, sigla_temp); //atribui nova sigla a esse bloco
+            // Meta 1
+            novo_tribunal->casos_novos_2026 = casos_novos_2026temp;
+            novo_tribunal->julgados_2026 = julgados_2026temp;
+            novo_tribunal->suspensos_2026 = suspensos_2026temp;
+            novo_tribunal->dessobrestados_2026 = dessobrestados_2026temp;
+
+            // Meta 2A
+            novo_tribunal->distm2_a = distm2_atemp;
+            novo_tribunal->julgm2_a = julgm2_atemp;
+            novo_tribunal->suspm2_a = suspm2_atemp;
+
+            // Meta 2Ant
+            novo_tribunal->distm2_ant = distm2_anttemp;
+            novo_tribunal->julgm2_ant = julgm2_anttemp;
+            novo_tribunal->suspm2_ant = suspm2_anttemp;
+            novo_tribunal->desom2_ant = desom2_anttemp;
+
+            // Meta 4A
+            novo_tribunal->distm4_a = distm4_atemp;
+            novo_tribunal->julgm4_a = julgm4_atemp;
+            novo_tribunal->suspm4_a = suspm4_atemp;
+
+            // Meta 4B
+            novo_tribunal->distm4_b = distm4_btemp;
+            novo_tribunal->julgm4_b = julgm4_btemp;
+            novo_tribunal->suspm4_b = suspm4_btemp;
 
 
+
+            /* agora o novo tribunal aponta para o mais antigo. caso so existisse
+             * Acre antes desse if e o while(fgets) ja chegou em alagoas, os nós
+             * ficam estruturados assim agora:
+             *
+             * alagoas -> acre -> null
+             * os que vao chegando vao ficando na frente de quem ja existia.
+             *
+             * e se nao existir nenhum tribunal ainda, fica assim:
+             *
+             * acre -> null
+             * pq inicio_lista aponta para null la no começo */
+
+            novo_tribunal->prox = inicio_lista;
+
+            /* inicio_lista se torna agora o novo tribunal, pois, como falei
+             * quem chega fica na frente de quem ja estava */
+
+            inicio_lista = novo_tribunal;
         }
     }
-
-
 }

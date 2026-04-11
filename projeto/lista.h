@@ -49,6 +49,7 @@ typedef enum {
 
     ERR_ABRIR_ARQUIVO = -1, //erro fopen
     ERR_ABRIR_RESULTADO = -2, //erro ao abrir o resultado
+    ERR_ALOCAR_MEMORIA = -3, //erro ao fazer malloc
 
 }Codigos_Erro;
 
