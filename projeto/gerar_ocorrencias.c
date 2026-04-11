@@ -35,6 +35,7 @@ int gerar_ocorrencias(char *MUNICIPIO) {
         while (token != NULL) {
             if (contador == 5) { //5 é a posicao do municipio
                 remover_aspas(token); //remove aspas do municipio antes de comparar com a que o usuario mandou (que ja esta sem as aspas)
+                remover_acentos(token); //remove acento aqui pq o do usuario ja esta sem
                 if (strcmp(token, MUNICIPIO) == 0) { //se municipio do arquivo for igual ao informado pelo usuario
                     fprintf(saida,"%s", salva_linha);
                     contador_aparicoes++;
@@ -51,7 +52,7 @@ int gerar_ocorrencias(char *MUNICIPIO) {
 
     //se nao encontrar o municipio
     if (contador_aparicoes == 0) {
-        remove("saida/caminho");
+        remove(caminho);
         return ERR_MUNICIPIO_N_EXISTE;
     }
 
