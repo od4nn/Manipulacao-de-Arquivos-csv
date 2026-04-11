@@ -62,4 +62,5 @@ int gerar_resumo(void); //faz um resumo de cada estado
 int gerar_ocorrencias(char *MUNICIPIO); //mostra todas as linhas que apareceu o nome do municipio
 void remover_aspas(char *str);
 void limpar_buffer(void);
+void remover_acentos(char *str); //remove acentos identificando se a caractere é ou nao de 2 bytes
 #endif //MANIPULACAO_ARQUIVOS_LISTA_H
