@@ -1,7 +1,86 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "lista.h"
 #include <string.h>
+#include "lista.h"
+
+/*funcoes principais */
+
+int concatenar_dados(void) {
+    char *arquivos[] = {
+        "Base-de-Dados/teste_TRE-AC.csv",
+        "Base-de-Dados/teste_TRE-AL.csv",
+        "Base-de-Dados/teste_TRE-AM.csv",
+        "Base-de-Dados/teste_TRE-AP.csv",
+        "Base-de-Dados/teste_TRE-BA.csv",
+        "Base-de-Dados/teste_TRE-CE.csv",
+        "Base-de-Dados/teste_TRE-DF.csv",
+        "Base-de-Dados/teste_TRE-ES.csv",
+        "Base-de-Dados/teste_TRE-GO.csv",
+        "Base-de-Dados/teste_TRE-MA.csv",
+        "Base-de-Dados/teste_TRE-MG.csv",
+        "Base-de-Dados/teste_TRE-MS.csv",
+        "Base-de-Dados/teste_TRE-MT.csv",
+        "Base-de-Dados/teste_TRE-PA.csv",
+        "Base-de-Dados/teste_TRE-PB.csv",
+        "Base-de-Dados/teste_TRE-PE.csv",
+        "Base-de-Dados/teste_TRE-PI.csv",
+        "Base-de-Dados/teste_TRE-PR.csv",
+        "Base-de-Dados/teste_TRE-RJ.csv",
+        "Base-de-Dados/teste_TRE-RN.csv",
+        "Base-de-Dados/teste_TRE-RO.csv",
+        "Base-de-Dados/teste_TRE-RR.csv",
+        "Base-de-Dados/teste_TRE-RS.csv",
+        "Base-de-Dados/teste_TRE-SC.csv",
+        "Base-de-Dados/teste_TRE-SE.csv",
+        "Base-de-Dados/teste_TRE-SP.csv",
+        "Base-de-Dados/teste_TRE-TO.csv"
+    }; //
+
+    FILE *r = fopen("saida/resultado.csv", "w"); /* Optei por usar w
+        porque a saida vai ser feita em um so arquivo dependendo de qual a opcao o usuario escolha
+        e sempre vai sobrescrever a passada*/
+    if (r == NULL) {
+        return ERR_ABRIR_ARQUIVO;
+    }
+
+    for (int i = 0; i < QUANT_ESTADOS; i++) {
+
+        FILE *f = fopen(arquivos[i], "r");
+        if (f == NULL) {
+            fclose (r); // Fecha o primeiro arquivo se o segundo falhar
+            return ERR_ABRIR_ARQUIVO;
+        }
+
+        //se o estado for o primeiro, copiar tudo inclusive o cabeçalho
+        if (i == 0) {    //faremos isso so uma vez porque todos os arquivos tem seus cabeçalhos
+            char LINHA[TAM_LINHA];
+
+            /* enquanto tiver linhas para ler continue executando, sei que o
+             * != NULL é opcional mas optei por usar por clareza de codigo */
+            while (fgets(LINHA, TAM_LINHA, f) != NULL) {
+                fprintf(r, "%s", LINHA);
+            }
+
+            fclose(f);
+
+            continue; //força a ir para o proximo loop ignorando o codigo abaixo
+        }
+
+        char LINHA[TAM_LINHA];
+
+        fgets(LINHA, TAM_LINHA, f); //consome a primeira linha que é o cabeçalho
+
+        while (fgets(LINHA, TAM_LINHA, f) != NULL) {
+            fprintf(r, "%s", LINHA);
+        }
+
+        fclose(f);
+    }
+
+    fclose(r);
+
+    return OK; //deu tudo certo
+}
 
 int gerar_resumo(void) {
     FILE *f = fopen("saida/resultado.csv", "r"); //abre o arquivo gigante de mais de 200 mil linhas
@@ -301,4 +380,109 @@ int gerar_resumo(void) {
     }
 
     return OK; // se chegou aqui, deu tudo certo e gerou o arquivo em saida/
+}
+
+int gerar_ocorrencias(char *MUNICIPIO) {
+    FILE *f = fopen("saida/resultado.csv", "r");
+
+    if (f == NULL) {
+        return ERR_ABRIR_RESULTADO;
+    }
+    char caminho[100];
+    snprintf(caminho, sizeof(caminho), "saida/%s.csv", MUNICIPIO);
+    FILE *saida = fopen(caminho, "w");
+
+    if (saida == NULL) {
+        fclose (f);
+        return ERR_ABRIR_ARQUIVO;
+    }
+
+    char LINHA[TAM_LINHA];
+    int contador_aparicoes = 0;
+
+    fgets (LINHA, TAM_LINHA, f);
+    fprintf(saida, "%s", LINHA); //escreve o cabeçalho uma só vez
+
+    while (fgets(LINHA, TAM_LINHA, f) != NULL) {
+
+        /*faz uma copia da linha atual pq o strtok divide ela*/
+        char salva_linha[TAM_LINHA];
+        strcpy (salva_linha, LINHA);
+
+        char *token = strtok(LINHA,",");
+        int contador = 0;
+
+        while (token != NULL) {
+            if (contador == 5) { //5 é a posicao do municipio
+                remover_aspas(token); //remove aspas do municipio antes de comparar com a que o usuario mandou (que ja esta sem as aspas)
+                remover_acentos(token); //remove acento aqui pq o do usuario ja esta sem
+                if (strcmp(token, MUNICIPIO) == 0) { //se municipio do arquivo for igual ao informado pelo usuario
+                    fprintf(saida,"%s", salva_linha);
+                    contador_aparicoes++;
+                    break; //se a posicao 5 nao for o municipio desejado, avança uma linha
+                }
+            }
+            contador++;
+            token = strtok(NULL, ","); //vai para proxima virgula (proxima coluna) nessa linha
+        }
+    }
+
+    fclose(f);
+    fclose(saida);
+
+    //se nao encontrar o municipio
+    if (contador_aparicoes == 0) {
+        remove(caminho);
+        return ERR_MUNICIPIO_N_EXISTE;
+    }
+
+    return OK;
+}
+
+/* funcoes auxiliares */
+
+void remover_aspas(char *str) {
+    int tamanho = strlen(str);
+    if (tamanho > 0 && str[0] == '"') {
+        memmove(str, str + 1, tamanho); // remove a primeira aspas
+        tamanho--;
+    }
+    if (tamanho > 0 && str[tamanho - 1] == '"') {
+        str[tamanho - 1] = '\0'; // remove a última aspas
+    }
+}
+
+void limpar_buffer(void) {
+    /* limpa o buffer para evitar que tenha
+        quebra de linha em fgets futuros */
+    while (getchar() != '\n');
+}
+
+void remover_acentos(char *str) {
+    unsigned char *s = (unsigned char *) str;
+    unsigned char *d = (unsigned char *) str;
+
+    while (*s) {
+        if (*s < 128) { // caractere ASCII normal, copia direto
+            *d++ = *s++;
+        } else { // dois bytes UTF-8, verifica qual é
+            unsigned char c1 = *s++;
+            unsigned char c2 = *s++;
+            if (c1 == 0xC3) {
+                if      (c2 >= 0x80 && c2 <= 0x85) *d++ = 'A'; // À Á Â Ã Ä Å
+                else if (c2 >= 0xA0 && c2 <= 0xA5) *d++ = 'A'; // à á â ã ä å
+                else if (c2 == 0x87)                *d++ = 'C'; // Ç
+                else if (c2 == 0xA7)                *d++ = 'C'; // ç
+                else if (c2 >= 0x88 && c2 <= 0x8B) *d++ = 'E'; // È É Ê Ë
+                else if (c2 >= 0xA8 && c2 <= 0xAB) *d++ = 'E'; // è é ê ë
+                else if (c2 >= 0x8C && c2 <= 0x8F) *d++ = 'I'; // Ì Í Î Ï
+                else if (c2 >= 0xAC && c2 <= 0xAF) *d++ = 'I'; // ì í î ï
+                else if (c2 >= 0x92 && c2 <= 0x96) *d++ = 'O'; // Ò Ó Ô Õ Ö
+                else if (c2 >= 0xB2 && c2 <= 0xB6) *d++ = 'O'; // ò ó ô õ ö
+                else if (c2 >= 0x99 && c2 <= 0x9C) *d++ = 'U'; // Ù Ú Û Ü
+                else if (c2 >= 0xB9 && c2 <= 0xBC) *d++ = 'U'; // ù ú û ü
+            }
+        }
+    }
+    *d = '\0';
 }
