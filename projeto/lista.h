@@ -3,9 +3,10 @@
 
 /* -- DEFINES -- */
 
-#define QUANT_ESTADOS 26
+#define QUANT_ESTADOS 27
 #define TAM_LINHA 1000 //acredite em mim, precisa ser grande assim se nao da problema no cabeçalho quando concatenar o arquivo
 #define TAM_SIGLA_TRIB 10
+#define TAM_NOME_MUNICIPIO 50
 
 typedef struct no{
     //identificador
@@ -50,6 +51,7 @@ typedef enum {
     ERR_ABRIR_ARQUIVO = -1, //erro fopen
     ERR_ABRIR_RESULTADO = -2, //erro ao abrir o resultado
     ERR_ALOCAR_MEMORIA = -3, //erro ao fazer malloc
+    ERR_MUNICIPIO_N_EXISTE = -4, //erro municipio nao encontrado
 
 }Codigos_Erro;
 
@@ -58,4 +60,6 @@ typedef enum {
 int concatenar_dados(void); //junta tudo
 int gerar_resumo(void); //faz um resumo de cada estado
 int gerar_ocorrencias(char *MUNICIPIO); //mostra todas as linhas que apareceu o nome do municipio
+void remover_aspas(char *str);
+void limpar_buffer(void);
 #endif //MANIPULACAO_ARQUIVOS_LISTA_H
