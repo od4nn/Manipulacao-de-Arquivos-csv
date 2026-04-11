@@ -67,13 +67,16 @@ int main() {
             case 3: {
                 char NOME_MUNICIPIO[TAM_NOME_MUNICIPIO];
 
-                printf("Informe o nome do municipio que deseja"
-                       " procurar as ocorrencias: ");
+                printf("Informe o nome do municipio que deseja "
+                       "procurar as ocorrencias (por favor informe o nome "
+                       "sem acentos): ");
                 fgets(NOME_MUNICIPIO, TAM_NOME_MUNICIPIO, stdin);
                 //remove o \n da string
                 NOME_MUNICIPIO[strcspn(NOME_MUNICIPIO, "\n")] = '\0';
 
                 remover_aspas(NOME_MUNICIPIO); //vai que o usuario acha que tem que colocar aspas
+
+                remover_acentos(NOME_MUNICIPIO);
 
                 int tamanho_municipio = strlen(NOME_MUNICIPIO);
 
