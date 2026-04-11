@@ -55,6 +55,7 @@ int gerar_resumo(void) {
             switch (contador) {
                 case 0: {
                     strcpy(sigla_temp, token);
+                    remover_aspas(sigla_temp); //remove as aspas da sigla do tribunal
                     break;
                 }
                 case 10: {
