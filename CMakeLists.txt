@@ -7,7 +7,4 @@ add_executable(Manipulacao_Arquivos
         projeto/main.c
         projeto/lista.h
         projeto/lista.c
-        projeto/gerar_resumo.c
-        projeto/gerar_ocorrencias.c
-        projeto/uteis.c
 )

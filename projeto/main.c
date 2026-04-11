@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "lista.h"
 #include <ctype.h>
@@ -24,7 +25,7 @@ int main() {
 
                 if (resultado == OK) {
                     printf("\nSucesso! O arquivo de resultado foi gerado"
-                           " na pasta 'saida'. ");
+                           " na pasta 'saida'. \n");
                     break;
                 }
                 if (resultado == ERR_ABRIR_ARQUIVO) {
@@ -42,7 +43,7 @@ int main() {
                 switch (resultado) {
                     case OK: {
                         printf("\nSucesso! O arquivo de resumo foi gerado na "
-                           "pasta 'saida'.");
+                           "pasta 'saida'.\n");
                         break;
                     }
                     case ERR_ABRIR_RESULTADO: {
@@ -93,7 +94,7 @@ int main() {
                 switch (resultado) {
                     case OK: {
                         printf("\nSucesso! O arquivo de ocorrencias foi gerado na "
-                           "pasta 'saida'.");
+                           "pasta 'saida'.\n");
                         break;
                     }
                     case ERR_ABRIR_RESULTADO: {
