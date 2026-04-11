@@ -4,7 +4,7 @@
 /* -- DEFINES -- */
 
 #define QUANT_ESTADOS 26
-#define TAM_LINHA 200 //mais que suficiente para cada linha dos arquivos das bases de dados
+#define TAM_LINHA 1000 //acredite em mim, precisa ser grande assim se nao da problema no cabeçalho quando concatenar o arquivo
 #define TAM_SIGLA_TRIB 10
 
 typedef struct no{
