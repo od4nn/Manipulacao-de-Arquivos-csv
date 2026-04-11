@@ -30,34 +30,45 @@ int main() {
                     printf("\nErro: ao abrir o arquivo!");
                     break;
                 }
+                break;
             }
             case 2: {
                 int resultado = gerar_resumo();
 
-                if (resultado == OK) {
-                    printf("\nSucesso! O arquivo de resumo foi gerado na "
+                switch (resultado) {
+                    case OK: {
+                        printf("\nSucesso! O arquivo de resumo foi gerado na "
                            "pasta 'saida'.");
-                    break;
-                }
-                if (resultado == ERR_ABRIR_RESULTADO) {
-                    printf("\nErro: arquivo 'resultado' nao encontrado! "
+                        break;
+                    }
+                    case ERR_ABRIR_RESULTADO: {
+                        printf("\nErro: arquivo 'resultado' nao encontrado! "
                            "Voce deve gerar esse arquivo na opcao 1 "
                            "do menu antes de usar esta funcao.");
-                    break;
+                        break;
+                    }
+                    case ERR_ABRIR_ARQUIVO: {
+                        printf("\nErro: ao abrir o arquivo!");
+                        break;
+                    }
+                    case ERR_ALOCAR_MEMORIA: {
+                        printf("\nErro: ao alocar memoria!");
+                        break;
+                    }
+                    default: {
+                        printf("\nErro desconhecido...");
+                    }
                 }
-
-                //ainda falta fazer a chamada aqui eu sei, mas ignore por ora, irei fazer isso logo
+                break;
             }
             case 0: {
                 printf("\nEncerrando o programa...\n");
                 break;
             }
             default: {
-                printf("Escolha uma opcao valida!");
+                printf("\nEscolha uma opcao valida!");
             }
         }
-
-
 
     }while (opcao != 0);
     return 0;
