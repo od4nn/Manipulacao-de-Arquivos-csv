@@ -362,8 +362,14 @@ int gerar_resumo(void) {
         }
 
         /* finalmente coloca no arquivo */
-        fprintf(saida, "%s, %lld, %.2f, %.2f, %.2f, %.2f, %.2f\n", aux->sigla_tribunal,
-            aux->julgados_2026, meta2a, meta2ant, meta4a, meta4b);
+        fprintf(saida, "%s, %lld, %.2f, %.2f, %.2f, %.2f, %.2f\n", 
+            aux->sigla_tribunal,
+            aux->julgados_2026,
+            meta1,
+            meta2a,
+            meta2ant,
+            meta4a,
+            meta4b);
 
         aux = aux->prox; //avança para o proximo estado
         //nesse caso eles estao organizados do ultimo para o primeiro
